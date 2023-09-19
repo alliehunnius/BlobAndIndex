@@ -21,7 +21,6 @@ public class Blob
     }   
 
 
-
     public static String fileToString (String fileName) throws Throwable
         {
             String endResult = "";
@@ -83,9 +82,6 @@ public class Blob
 
     public static void stringToFile (String string, String fileName) throws IOException
         {
-     
-
-
             // attach a file to FileWriter
             File file = new File ("objects/" + string);
             file.createNewFile();
@@ -99,19 +95,16 @@ public class Blob
                     ch = (char) fr.read();
                     endResult += ch;
                 }
-
-
-
                 fw.write(endResult);
      
             //close the file
             fw.close();
         }
 
-        public String originalName ()
-        {
-            return name;
-        }
+    public String originalName ()
+    {
+        return name;
+    }
 
 
 }

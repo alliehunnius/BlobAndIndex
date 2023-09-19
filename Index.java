@@ -1,5 +1,7 @@
 import java.io.File;
 import java.io.FileNotFoundException;
+import java.io.FileWriter;
+import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.HashMap;
 
@@ -7,64 +9,66 @@ public class Index {
     
     private HashMap <String, String> hm;
     private PrintWriter pw;
-    public Index() throws FileNotFoundException
+    public Index() throws IOException
     {
-
         hm = new HashMap <String, String> ();
-        pw = new PrintWriter ("index");
+        pw = new PrintWriter (new FileWriter("index", false));
+        
     }
 
-    public void initialize ()
+    public void initialize () throws IOException
     {
-        File file = new File ("objects");
-        if (!file.exists() || !file.isDirectory())
+        
+        File path = new File("objects");
+        path.mkdirs();
+        File file = new File ("index");
+        if (!file.exists())
         {
-            String dirName = "objects";
-            File directory = new File (dirName);
-            directory.mkdirs();
-        }
-        File index = new File ("objects");
-
-        if (!index.exists ())
-        {
-            index = new File ("objects", "index");
+            //File newFile = new File
+            file.createNewFile();
         }
     }
 
     public void addBlobs (String fileName) throws Throwable
     {
         Blob blob = new Blob (fileName);
-        String s = Blob.encryptPassword(fileName);
-        hm.put (blob.originalName(), s);
+        String content = Blob.fileToString(fileName);
+        String s = Blob.encryptPassword(content);
+        hm.put(fileName, s);
         
         for (HashMap.Entry <String, String> entry : hm.entrySet ())
         {
-            String string = entry.getKey () + " : " + entry.getValue ();
-            pw.println (string);
-
+            String string = entry.getKey () + " : " + entry.getValue();
+            pw.println(string);
         }
         pw.close();
-
-
-
     }
 
-
-    public void removeBlob (String fileName) throws FileNotFoundException
+    public void removeBlob (String fileName) throws Throwable
     {
-        hm.remove (fileName);
-
-        for (HashMap.Entry <String, String> entry : hm.entrySet ())
+        File file = new File(fileName);
+        if (file.exists()) 
         {
-            pw.println (entry.getKey () + " : " + entry.getValue ());
+            String content = Blob.fileToString(fileName);
+            String s = Blob.encryptPassword(content);
+            File doomedFile = new File ("objects", s);
+            doomedFile.delete();
+        }
 
+        hm.remove(fileName);
+        if(hm.isEmpty())
+        {
+            pw = new PrintWriter (new FileWriter("index", false));
+        }
+        else
+        {
+            for (HashMap.Entry <String, String> entry : hm.entrySet ())
+            {
+                pw.println (entry.getKey () + " : " + entry.getValue ());
+            }
         }
         pw.close();
     }
-
-
-
-
  }
 
 

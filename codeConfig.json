@@ -1,0 +1,64 @@
+[
+    {
+        "className": "Index",
+        "constructorConfigs": [
+            {
+                "parameterTypes": [
+
+                ],
+                "values": [
+
+                ]
+            }
+        ],
+        "methodConfigs": [
+            {
+                "methodName": "initialize",
+                "parameters": ["String"],
+                "values": ["fileName"]
+            },
+            {
+                "methodName": "addBlobs",
+                "parameters": [
+                    "String"
+                ],
+                "values": [
+                    "fileName"
+                ]
+            }
+        ]
+    },
+    {
+        "className": "Blob",
+        "constructorConfigs": [
+            {
+                "parameterTypes": [
+                    "String"
+                ],
+                "values": [
+                    "fileName"
+                ]
+            }
+        ],
+        "methodConfigs": [
+            {
+                "methodName": "fileToString",
+                "parameters": [
+                    "String"
+                ],
+                "values": [
+                    "fileName"
+                ]
+            },
+            {
+                "methodName": "stringToFile",
+                "parameters": [
+                    "String", "String"
+                ],
+                "values": [
+                    "string", "fileName"
+                ]
+            }
+        ]
+    }
+]
