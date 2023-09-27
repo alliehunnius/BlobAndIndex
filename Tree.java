@@ -21,6 +21,8 @@ public class Tree {
     private static ArrayList<String> treeList;
     private static TreeMap <String, String> blobMap;
     private static String currentFileName;
+    private String newName;
+    private 
     //private File file; 
     //private PrintWriter pw;
 
@@ -33,6 +35,7 @@ public class Tree {
         path.mkdirs();
         //this.file = file;
         //pw = new PrintWriter(new FileWriter("tree", true));
+        newName = "";
     }
     
     /*Add another entry into the tree:
@@ -187,4 +190,123 @@ Do NOT allow for duplicate 'trees' or duplicate 'filenames' in the file */
     {
         return currentFileName;
     }
+
+    public String addDirectory (String directoryPath) throws Throwable
+    {
+        Tree tree = new Tree ();
+        createDirectory (directoryPath);
+        File initialFile = new File (directoryPath, "first.txt");
+        BufferedReader reader = new BufferedReader(new FileReader(currentFileName));
+        String temp = "";
+        Blob blob;
+        
+
+        if (reader.ready())
+        {
+            temp = reader.readLine();
+        }
+
+
+
+        while (reader.ready())
+        {
+            if (!temp.contains (".txt"))
+            {
+                Tree childTree = new Tree ();
+                childTree.addDirectory (directoryPath);
+                Blob treeBlob = new Blob (temp);
+                tree.addTree ("tree : " + Blob.fileToString (temp) + " : " + temp);
+            }
+            if (temp.contains (".txt"))
+            {
+                BufferedReader fileReader = new BufferedReader (new FileReader (temp));
+                while (fileReader.ready())
+                {
+                    String files = fileReader.readLine();
+                    File file = new File (files);
+                    blob = new Blob (files);
+                    String readFile = Blob.fileToString (files);
+                    tree.addTree ("blob : " + readFile + " : " + files);
+            
+                }
+            }
+                temp = reader.readLine();
+        }
+        
+        
+        String newName = Blob.encryptPassword (content());
+        File treeFile = new File ("objects/" + newName);
+        FileWriter fw = new FileWriter (treeFile);
+        fw.write (content());
+        
+        fw.close();
+        reader.close();
+        return newName;
+        
+
+
+        
+        
+        
+        
+        
+    }
+
+    public String generateTree (String directoryPath) throws Throwable
+    {
+        Tree tree = new Tree ();
+        createDirectory (directoryPath);
+        File initialFile = new File (directoryPath, "first.txt");
+        BufferedReader reader = new BufferedReader(new FileReader(currentFileName));
+        String temp = "";
+        Blob blob;
+
+        while (reader.ready())
+        {
+            temp = reader.readLine();
+            File file = new File (temp);
+            blob = new Blob (temp);
+            String readFile = Blob.fileToString (temp);
+            tree.addTree ("blob: " + readFile + " : " + temp);
+            
+        }
+
+        newName = Blob.encryptPassword (content());
+        File treeFile = new File ("objects/" + newName);
+        FileWriter fw = new FileWriter (treeFile);
+        fw.write (content());
+        
+        fw.close();
+        reader.close();
+        return newName;
+        
+
+    }
+    {
+
+    }
+
+
+
+
+
+
+
+
+
+    public String getTreeName ()
+    {
+        return newName;
+    }
+
+    public void createDirectory (String dirName)
+    {
+        File f = new File(dirName);
+        if(!f.exists())
+            f.mkdirs();
+    }
+
+
+
+
 }

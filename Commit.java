@@ -49,8 +49,7 @@ Returns the SHA1 of the Tree*/
         path.mkdirs();
         FileOutputStream stream = new FileOutputStream(new File(path , "Commit"));
         //File commit = new File("Commit");
-        FileWriter writer - new FileWriter("Commit");
-        wri
+        FileWriter writer = new FileWriter("Commit");
         writer.close();
 
     }

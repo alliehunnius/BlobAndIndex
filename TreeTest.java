@@ -69,4 +69,33 @@ public class TreeTest
 			return "File not found, whoops!";
 		}
     }
+
+    @Test
+    void testDirectory () throws Throwable 
+    {
+        File tester = new File("directory");
+        File file1 = new File ("directory", "file1");
+        File file2 = new File ("directory", "file2");
+        File file3 = new File ("directory", "file3");
+        Tree tree = new Tree ();
+        tree.addDirectory ("newDirectory");
+        File file = new File ("newDirectory");
+        assertTrue (file.exists());
+    }
+
+    @Test
+    void testDirectory2 () throws Throwable
+    {
+        File tester = new File("directory");
+        File file1 = new File ("directory", "file1");
+        File file2 = new File ("directory", "file2");
+        File file3 = new File ("directory", "file3");
+        File folder1 = new File ("folder1");
+        File folder2 = new File ("folder2");
+        tree.addDirectory ("newDirectory");
+        File file = new File ("newDirectory");
+        assertTrue (file.exists());
+        //create a file in the inner folders?
+
+    }
 }
