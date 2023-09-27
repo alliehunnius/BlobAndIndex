@@ -22,7 +22,6 @@ public class Tree {
     private static TreeMap <String, String> blobMap;
     private static String currentFileName;
     private String newName;
-    private 
     //private File file; 
     //private PrintWriter pw;
 
