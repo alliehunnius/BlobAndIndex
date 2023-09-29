@@ -36,6 +36,8 @@ public class Tree {
         //this.file = file;
         //pw = new PrintWriter(new FileWriter("tree", true));
         newName = "";
+        Index index = new Index();
+        index.initialize();
     }
     
     /*Add another entry into the tree:
@@ -197,12 +199,13 @@ Do NOT allow for duplicate 'trees' or duplicate 'filenames' in the file */
         createDirectory (directoryPath);
 
         String initialDirectory = "objects";
-        BufferedReader dr = new BufferedReader (new FileReader (initialDirectory));
+        File dirFile = new File ("objects");
+        String [] array = dirFile.list();
         String current = "";
-       
-        while (dr.ready())
+       int x = 0;
+        while (x < array.length)
         {
-            current = dr.readLine();
+            current = array [0];
             File file = new File (current);
             if (file.isDirectory())
             {
@@ -229,7 +232,6 @@ Do NOT allow for duplicate 'trees' or duplicate 'filenames' in the file */
             newName = Blob.encryptPassword (contents);
             File finalFile = new File (directoryPath, newName);
 
-            dr.close();
             return newName;
             
 
