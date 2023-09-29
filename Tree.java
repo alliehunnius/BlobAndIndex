@@ -17,6 +17,7 @@ import java.util.Map;
 import java.util.Set;
 import java.util.TreeMap;
 
+
 public class Tree {
     private static ArrayList<String> treeList;
     private static TreeMap <String, String> blobMap;
@@ -194,6 +195,67 @@ Do NOT allow for duplicate 'trees' or duplicate 'filenames' in the file */
     {
         Tree tree = new Tree ();
         createDirectory (directoryPath);
+
+        String initialDirectory = "objects";
+        BufferedReader dr = new BufferedReader (new FileReader (initialDirectory));
+        String current = "";
+       
+        while (dr.ready())
+        {
+            current = dr.readLine();
+            File file = new File (current);
+            if (file.isDirectory())
+            {
+                Tree childTree = new Tree ();
+                childTree.addDirectory (directoryPath);
+                Blob treeBlob = new Blob (current);
+                String fileContents = Blob.fileToString (current);
+                String sha = Blob.encryptPassword (fileContents);
+                tree.addTree ("tree : " + sha + " : " + current);
+
+                
+            }
+            if (file.isFile())
+            {
+                Blob blob = new Blob (current);
+                String readFile = Blob.fileToString (current);
+                String sha = Blob.encryptPassword(readFile);
+                tree.addTree ("blob : " + sha + " : " + current);
+                
+            }
+            
+            String contents = content();
+            Blob finalBlob = new Blob (currentFileName);
+            newName = Blob.encryptPassword (contents);
+            File finalFile = new File (directoryPath, newName);
+
+            dr.close();
+            return newName;
+            
+
+
+
+
+        }
+
+        
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
         File initialFile = new File (directoryPath, "first.txt");
         BufferedReader reader = new BufferedReader(new FileReader(currentFileName));
         String temp = "";
@@ -211,10 +273,7 @@ Do NOT allow for duplicate 'trees' or duplicate 'filenames' in the file */
         {
             if (!temp.contains (".txt"))
             {
-                Tree childTree = new Tree ();
-                childTree.addDirectory (directoryPath);
-                Blob treeBlob = new Blob (temp);
-                tree.addTree ("tree : " + Blob.fileToString (temp) + " : " + temp);
+               
             }
             if (temp.contains (".txt"))
             {
