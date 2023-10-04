@@ -206,7 +206,7 @@ Do NOT allow for duplicate 'trees' or duplicate 'filenames' in the file */
         while (x < array.length)
         {
             current = array [0];
-            File file = new File (current);
+            File file = new File ("objects", current);
             if (file.isDirectory())
             {
                 Tree childTree = new Tree ();
@@ -218,131 +218,30 @@ Do NOT allow for duplicate 'trees' or duplicate 'filenames' in the file */
 
                 
             }
-            if (file.isFile())
+            else if (file.isFile())
             {
-                Blob blob = new Blob (current);
+                Blob blob = new Blob ("objects/" + current);
                 String readFile = Blob.fileToString (current);
                 String sha = Blob.encryptPassword(readFile);
                 tree.addTree ("blob : " + sha + " : " + current);
                 
             }
             
+
+
+            x++;
+        }
+
+        
+
+
             String contents = content();
             Blob finalBlob = new Blob (currentFileName);
             newName = Blob.encryptPassword (contents);
             File finalFile = new File (directoryPath, newName);
 
             return newName;
-            
 
-
-
-
-        }
-
-        
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-        File initialFile = new File (directoryPath, "first.txt");
-        BufferedReader reader = new BufferedReader(new FileReader(currentFileName));
-        String temp = "";
-        Blob blob;
-        
-
-        if (reader.ready())
-        {
-            temp = reader.readLine();
-        }
-
-
-
-        while (reader.ready())
-        {
-            if (!temp.contains (".txt"))
-            {
-               
-            }
-            if (temp.contains (".txt"))
-            {
-                BufferedReader fileReader = new BufferedReader (new FileReader (temp));
-                while (fileReader.ready())
-                {
-                    String files = fileReader.readLine();
-                    File file = new File (files);
-                    blob = new Blob (files);
-                    String readFile = Blob.fileToString (files);
-                    tree.addTree ("blob : " + readFile + " : " + files);
-            
-                }
-            }
-                temp = reader.readLine();
-        }
-        
-        
-        String newName = Blob.encryptPassword (content());
-        File treeFile = new File ("objects/" + newName);
-        FileWriter fw = new FileWriter (treeFile);
-        fw.write (content());
-        
-        fw.close();
-        reader.close();
-        return newName;
-        
-
-
-        
-        
-        
-        
-        
-    }
-
-    public String generateTree (String directoryPath) throws Throwable
-    {
-        Tree tree = new Tree ();
-        createDirectory (directoryPath);
-        File initialFile = new File (directoryPath, "first.txt");
-        BufferedReader reader = new BufferedReader(new FileReader(currentFileName));
-        String temp = "";
-        Blob blob;
-
-        while (reader.ready())
-        {
-            temp = reader.readLine();
-            File file = new File (temp);
-            blob = new Blob (temp);
-            String readFile = Blob.fileToString (temp);
-            tree.addTree ("blob: " + readFile + " : " + temp);
-            
-        }
-
-        newName = Blob.encryptPassword (content());
-        File treeFile = new File ("objects/" + newName);
-        FileWriter fw = new FileWriter (treeFile);
-        fw.write (content());
-        
-        fw.close();
-        reader.close();
-        return newName;
-        
-
-    }
-    {
 
     }
 

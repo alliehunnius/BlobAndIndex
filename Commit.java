@@ -4,7 +4,10 @@ import java.io.FileOutputStream;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.io.PrintWriter;
 import java.io.UnsupportedEncodingException;
+import java.nio.file.Files;
+import java.nio.file.StandardOpenOption;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.util.Formatter;
@@ -34,40 +37,28 @@ Has a method to create a Tree which is used in the constructor
 Returns the SHA1 of the Tree*/
     String summary, author, date, parent, sha;
     File commit;
-    public Commit (String summary, String author, String date) throws Throwable
-    {
-        //commit is stored in the objects folder
-        //create tree in constructor
-        Tree tree = new Tree();
-        tree.addTree("");
-        sha = tree.getCurrentFileName();
-        this.author = author;
-        this.date = date;
-        this.summary = summary;
-        parent = tree.getCurrentFileName();
-        File path = new File ("objects");
-        path.mkdirs();
-        FileOutputStream stream = new FileOutputStream(new File(path , "Commit"));
-        //File commit = new File("Commit");
-        FileWriter writer = new FileWriter("Commit");
-        writer.close();
 
-    }
-
-    public Commit (String summary, String author, String date, String parent) throws Throwable
+    public Commit (String parent, String author, String summary) throws Throwable
     {
         Tree tree = new Tree();
         tree.addTree("");
         sha = tree.getCurrentFileName();
         this.summary = summary;
         this.author = author;
-        this.date = date;
+        date = "";
         this.parent = parent;
         File path = new File ("objects");
         path.mkdirs();
         FileOutputStream stream = new FileOutputStream(new File(path , "Commit"));
         //File commit = new File("Commit");
     }
+
+
+
+
+
+
+
 
     public void generateShaString() throws IOException
     {
@@ -122,4 +113,80 @@ Returns the SHA1 of the Tree*/
     {
         return date;
     }
+
+    public void createCommit () throws Throwable
+    {
+        Tree tree = new Tree ();
+        
+        String indexContents = Blob.fileToString ("index");
+
+        //String shaOfContents = Blob.encryptPassword (indexContents);
+        
+
+
+
+        tree.addTree (indexContents);//contents of index file
+        
+        //clear out index contents
+
+        Commit.clearTheFile();
+
+
+        //Include an additional entry to the previous Tree
+
+
+        //if the String parent is empty, this is the first commit, otherwise it's the name of the commit where you read the first line which is the tree of that commit
+       
+        if (parent.length() > 0)
+        {
+            BufferedReader br = new BufferedReader (new FileReader (parent));
+
+            String shaPreviousContents = br.readLine();
+            String add = "tree : " + shaPreviousContents;
+            tree.addTree (add);
+        }
+
+    }
+
+
+    public static void clearTheFile() throws IOException {
+        FileWriter fwOb = new FileWriter("index", false); 
+        PrintWriter pwOb = new PrintWriter(fwOb, false);
+        pwOb.flush();
+        pwOb.close();
+        fwOb.close();
+    }
+
+
+
+
+
+
+
+
+//Method to get Commit's Tree based on a Commit's SHA1
+
+    public void getCommitSha ()
+    {
+        //This method will open the SHA1 of the Commit and return the hash of the Tree (it's first line)
+    }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 }
