@@ -1,5 +1,6 @@
 import java.io.BufferedReader;
 import java.io.File;
+import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.FileReader;
 import java.io.FileWriter;
@@ -144,6 +145,7 @@ Returns the SHA1 of the Tree*/
             String shaPreviousContents = br.readLine();
             String add = "tree : " + shaPreviousContents;
             tree.addTree (add);
+            br.close();
         }
 
     }
@@ -166,9 +168,15 @@ Returns the SHA1 of the Tree*/
 
 //Method to get Commit's Tree based on a Commit's SHA1
 
-    public void getCommitSha ()
+    public String getTreeSha (String shaCommit) throws IOException
     {
-        //This method will open the SHA1 of the Commit and return the hash of the Tree (it's first line)
+
+        File file = new File (shaCommit);
+        BufferedReader br = new BufferedReader (new FileReader (shaCommit));
+        String treeSha = br.readLine();
+        br.close();
+        return (treeSha);
+
     }
 
 
