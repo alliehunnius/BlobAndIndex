@@ -39,33 +39,51 @@ It gets the date as a String in whatever format you like
 
 Has a method to create a Tree which is used in the constructor
 Returns the SHA1 of the Tree*/
-    String summary, author, date, parent, sha;
+    String summary, author, date, parent, sha, commitContentSha;
     File commit;
 
     public Commit (String parent, String author, String summary) throws Throwable
     {
-        Tree tree = new Tree();
-        tree.addTree("");
-        sha = tree.getCurrentFileName();
+        String treeSha = createTree();
+        
         this.summary = summary;
         this.author = author;
         date = "";
         this.parent = parent;
         File path = new File ("objects");
         path.mkdirs();
-        FileOutputStream stream = new FileOutputStream(new File(path , "Commit"));
+        String commitName = generateShaString();
+        FileOutputStream stream = new FileOutputStream(new File(path, commitName));
+
+
+        //is commitContentSha the first line of the Commit
+        String contents = treeSha + "\n" + this.parent + "\n" + "\n" + author + "\n" + date + "\n" + summary;
+        BufferedWriter bw = new BufferedWriter (new FileWriter ("Commit"));
+            bw.write (contents);
+            bw.close();
+
         //File commit = new File("Commit");
     }
 
 
+    public String createTree() throws Throwable
+    {
+
+        Tree tree = new Tree();
+        tree.addTree("");
+        //I want the Tree's sha for the first line of the Commit
+        String treeContents = tree.content();
+        return Blob.encryptPassword (treeContents);
+       
+    }
 
 
 
-    public void generateShaString() throws IOException
+    public String generateShaString() throws IOException
     {
         int line = 1;
         String contents = "";
-        String sha1;
+        String sha1 = "";
         BufferedReader reader = new BufferedReader(new FileReader("Commit"));
         while (reader.ready())
         {
@@ -95,7 +113,7 @@ Returns the SHA1 of the Tree*/
         {
             e.printStackTrace();
         }
-        //return sha1;
+        return sha1;
     }
 
     private static String byteToHex(final byte[] hash)
@@ -210,15 +228,6 @@ Returns the SHA1 of the Tree*/
         }
 
     }
-
-
-
-
-
-
-
-
-
 
 
 
