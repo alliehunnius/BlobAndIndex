@@ -1,4 +1,5 @@
 import java.io.BufferedReader;
+import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
@@ -53,9 +54,6 @@ Returns the SHA1 of the Tree*/
         FileOutputStream stream = new FileOutputStream(new File(path , "Commit"));
         //File commit = new File("Commit");
     }
-
-
-
 
 
 
@@ -130,7 +128,7 @@ Returns the SHA1 of the Tree*/
         
         //clear out index contents
 
-        Commit.clearTheFile();
+        Commit.clearTheFile("index");
 
 
         //Include an additional entry to the previous Tree
@@ -151,8 +149,8 @@ Returns the SHA1 of the Tree*/
     }
 
 
-    public static void clearTheFile() throws IOException {
-        FileWriter fwOb = new FileWriter("index", false); 
+    public static void clearTheFile(String fileName) throws IOException {
+        FileWriter fwOb = new FileWriter(fileName, false); 
         PrintWriter pwOb = new PrintWriter(fwOb, false);
         pwOb.flush();
         pwOb.close();
@@ -180,8 +178,36 @@ Returns the SHA1 of the Tree*/
     }
 
 
+    public void updatePreviousCommit () throws Throwable
+    {
+        //Line 3 of each Commit should be the SHA of the next commit.  
+        //Now that another commit is created, the previous commit's file needs to be updated with the new commit.
 
+        File currentC = new File (sha);
+        BufferedReader br = new BufferedReader (new FileReader (sha));
+        String prevSha = br.readLine();
+        prevSha = br.readLine();
 
+        File prev = new File (prevSha);
+
+        String prevContents = Blob.fileToString (prevSha);
+        int index = prevContents.indexOf ("\n\n");
+
+        Commit.clearTheFile (prevSha);
+
+        try (BufferedWriter writer = new BufferedWriter (new FileWriter (prevSha, true)))
+        {
+            writer.write (prevContents.substring (0, index + 2));
+            writer.write (sha);
+            writer.write (prevContents.substring (index + 4));
+
+        }
+         catch (IOException ex)
+        {
+            ex.printStackTrace();
+        }
+
+    }
 
 
 
@@ -198,3 +224,4 @@ Returns the SHA1 of the Tree*/
 
 
 }
+
