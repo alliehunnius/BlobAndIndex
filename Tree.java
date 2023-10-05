@@ -154,7 +154,7 @@ Do NOT allow for duplicate 'trees' or duplicate 'filenames' in the file */
         pw.close();*/
     }
 
-    public static String content()
+    public String content()
     {
         String content = "";
         Set<String> blobSet = blobMap.keySet();
