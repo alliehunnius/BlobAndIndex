@@ -14,6 +14,8 @@ import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.util.Formatter;
 
+import org.junit.Test;
+
 public class Commit
 {
 /*A prerequisite of a commit is that you need a Tree's SHA1 file location.  In order to get this you you must...
@@ -208,8 +210,6 @@ Returns the SHA1 of the Tree*/
         }
 
     }
-
-
 
 
 
