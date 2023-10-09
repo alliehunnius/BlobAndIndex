@@ -69,6 +69,34 @@ public class Index {
         }
         pw.close();
     }
+
+    public void addDirectory (String newDirectory) throws Throwable
+    {
+        //Adding Directories in the form of a Tree ???
+        Tree tree = new Tree ();
+        String write = tree.addDirectory (newDirectory);
+        pw.println ("tree : " + write);
+    }
+
+
+
+
+
+    public void updateTrees ()
+    {
+        //Updating the format of Index trees to match the recent Tree
+
+
+    }
+
+
+
+
+
+
+
+
+
  }
 
 
