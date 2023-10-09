@@ -1,3 +1,5 @@
+import java.io.File;
+
 import org.junit.jupiter.api.Test;
 
 public class CommitTest 
@@ -12,7 +14,7 @@ public class CommitTest
     public void createOneCommit() throws Throwable
     {
         Commit test = new Commit ("", "me", "test");
-        File expected = new File ("")
+    
         assertTrue ()
     }
 
