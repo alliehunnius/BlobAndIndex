@@ -53,7 +53,9 @@ Do NOT allow for duplicate 'trees' or duplicate 'filenames' in the file */
 
     public void addTree (String entry) throws Throwable
     {
-        String typeOfFile = entry.substring(0, 4); 
+        if (entry.length() > 0)
+        {
+            String typeOfFile = entry.substring(0, 4); 
         String shaOfFile = entry.substring(7, 47);
         if(treeList.contains(shaOfFile) || blobMap.containsKey(shaOfFile))
         {
@@ -69,6 +71,20 @@ Do NOT allow for duplicate 'trees' or duplicate 'filenames' in the file */
             blobMap.put(shaOfFile, optionalFileName);
         }
         updateName();
+        }
+        //what is happenning if the tree entry is blank like the first line of a Commit
+        
+
+
+
+
+
+
+
+
+
+
+
     }
     /*Remove an entry from a tree by...
     Remove a BLOB entry from the tree based on a filename
