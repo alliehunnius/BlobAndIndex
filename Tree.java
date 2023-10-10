@@ -37,13 +37,8 @@ public class Tree {
         //this.file = file;
         //pw = new PrintWriter(new FileWriter("tree", true));
         newName = "";
-        Index index = new Index();
-        index.initialize();
 
         //write index to Tree?
-
-        String indexContents = Blob.fileToString ("index");
-        Blob.stringToFile (indexContents, currentFileName);
         
 
 
