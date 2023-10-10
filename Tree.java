@@ -26,18 +26,30 @@ public class Tree {
     //private File file; 
     //private PrintWriter pw;
 
-    public Tree() throws IOException
+    public Tree() throws Throwable
     {
         treeList = new ArrayList<String>();
         blobMap = new TreeMap <String, String> ();
         currentFileName = "init";
         File path = new File("objects");
         path.mkdirs();
+
         //this.file = file;
         //pw = new PrintWriter(new FileWriter("tree", true));
         newName = "";
         Index index = new Index();
         index.initialize();
+
+        //write index to Tree?
+
+        String indexContents = Blob.fileToString ("index");
+        Blob.stringToFile (indexContents, currentFileName);
+        
+
+
+
+
+
     }
     
     /*Add another entry into the tree:
@@ -56,7 +68,7 @@ Do NOT allow for duplicate 'trees' or duplicate 'filenames' in the file */
         if (entry.length() > 0)
         {
             String typeOfFile = entry.substring(0, 4); 
-        String shaOfFile = entry.substring(7, 47);
+            String shaOfFile = entry.substring(7, 47);
         if(treeList.contains(shaOfFile) || blobMap.containsKey(shaOfFile))
         {
             return;
@@ -74,7 +86,7 @@ Do NOT allow for duplicate 'trees' or duplicate 'filenames' in the file */
         }
         //what is happenning if the tree entry is blank like the first line of a Commit
         
-
+        
 
 
 
