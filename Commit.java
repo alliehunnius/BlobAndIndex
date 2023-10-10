@@ -39,22 +39,24 @@ It gets the date as a String in whatever format you like
 
 Has a method to create a Tree which is used in the constructor
 Returns the SHA1 of the Tree*/
-    String summary, author, date, parent, sha, commitContentSha;
+    String summary, author, date, parent, sha, commitContentSha, commitName;
     File commit;
 
     public Commit (String parent, String author, String summary) throws Throwable
     {
-        String treeSha = createTree();
-        
+        String treeSha = createTree("");
+        //entry is coming from the index file;
+        //if the commit has a previous commit it has to have a pointer from the previous tree to the current tree, 
+        //commit's tree has the files
         this.summary = summary;
         this.author = author;
         date = "";
         this.parent = parent;
         File path = new File ("objects");
         path.mkdirs();
-        String commitName = generateShaString();
+        commitName = generateShaString();
         FileOutputStream stream = new FileOutputStream(new File(path, commitName));
-
+        //what are you doing with stream?
 
         //is commitContentSha the first line of the Commit
         String contents = treeSha + "\n" + this.parent + "\n" + "\n" + author + "\n" + date + "\n" + summary;
@@ -66,11 +68,20 @@ Returns the SHA1 of the Tree*/
     }
 
 
-    public String createTree() throws Throwable
+    public String getCommitName ()
+    {
+        return commitName;
+    }
+
+
+
+
+
+    public String createTree(String entry) throws Throwable
     {
 
         Tree tree = new Tree();
-        tree.addTree("");
+        tree.addTree(entry);
         //I want the Tree's sha for the first line of the Commit
         String treeContents = tree.content();
         return Blob.encryptPassword (treeContents);
@@ -84,7 +95,7 @@ Returns the SHA1 of the Tree*/
         int line = 1;
         String contents = "";
         String sha1 = "";
-        BufferedReader reader = new BufferedReader(new FileReader("Commit"));
+        BufferedReader reader = new BufferedReader(new FileReader(""));
         while (reader.ready())
         {
             if (line == 3)
