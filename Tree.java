@@ -39,8 +39,6 @@ public class Tree {
         newName = "";
 
         //write index to Tree?
-        
-
 
 
 
