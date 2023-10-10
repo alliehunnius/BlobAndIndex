@@ -44,8 +44,7 @@ Returns the SHA1 of the Tree*/
 
     public Commit (String parent, String author, String summary) throws Throwable
     {
-        String treeSha = "blank";
-        //createTree();
+        String treeSha = createTree();
         //entry is coming from the index file;
         //if the commit has a previous commit it has to have a pointer from the previous tree to the current tree, 
         //commit's tree has the files
@@ -93,9 +92,23 @@ Returns the SHA1 of the Tree*/
     {
 
         Tree tree = new Tree();
-        String indexContents = 
-        tree.addTree("index");
+        String indexContents = Blob.fileToString ("index");
+        tree.addTree(indexContents);
         //I want the Tree's sha for the first line of the Commit
+
+
+        //need to add previous tree
+
+        if (parent == "")
+        {
+            BufferedReader prevCommitReader = new BufferedReader (new FileReader (parent));
+            String previousTree = prevCommitReader.readLine();
+            prevCommitReader.close();
+            tree.addTree (previousTree);
+        }
+        
+
+
         String treeContents = tree.content();
         return Blob.encryptPassword (treeContents);
        
