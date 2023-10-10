@@ -44,7 +44,8 @@ Returns the SHA1 of the Tree*/
 
     public Commit (String parent, String author, String summary) throws Throwable
     {
-        String treeSha = createTree("");
+        String treeSha = "blank";
+        //createTree();
         //entry is coming from the index file;
         //if the commit has a previous commit it has to have a pointer from the previous tree to the current tree, 
         //commit's tree has the files
@@ -54,17 +55,28 @@ Returns the SHA1 of the Tree*/
         this.parent = parent;
         File path = new File ("objects");
         path.mkdirs();
-        commitName = generateShaString();
-        FileOutputStream stream = new FileOutputStream(new File(path, commitName));
-        //what are you doing with stream?
 
-        //is commitContentSha the first line of the Commit
         String contents = treeSha + "\n" + this.parent + "\n" + "\n" + author + "\n" + date + "\n" + summary;
-        BufferedWriter bw = new BufferedWriter (new FileWriter ("Commit"));
+        String commitName = Blob.encryptPassword (contents);
+
+        File theCommit = new File ("objects/", commitName);
+        BufferedWriter bw = new BufferedWriter (new FileWriter ("objects/" + commitName));
             bw.write (contents);
             bw.close();
 
+        //what are you doing with stream
+
+
+        
+
         //File commit = new File("Commit");
+
+
+
+
+
+
+
     }
 
 
@@ -77,11 +89,12 @@ Returns the SHA1 of the Tree*/
 
 
 
-    public String createTree(String entry) throws Throwable
+    public String createTree() throws Throwable
     {
 
         Tree tree = new Tree();
-        tree.addTree(entry);
+        String indexContents = 
+        tree.addTree("index");
         //I want the Tree's sha for the first line of the Commit
         String treeContents = tree.content();
         return Blob.encryptPassword (treeContents);
@@ -197,14 +210,14 @@ Returns the SHA1 of the Tree*/
 
 //Method to get Commit's Tree based on a Commit's SHA1
 
-    public String getTreeSha (String shaCommit) throws IOException
+    public String getTreeName (String commitName) throws IOException
     {
 
-        File file = new File (shaCommit);
-        BufferedReader br = new BufferedReader (new FileReader (shaCommit));
-        String treeSha = br.readLine();
+        File file = new File (commitName);
+        BufferedReader br = new BufferedReader (new FileReader (commitName));
+        String treeName = br.readLine();
         br.close();
-        return (treeSha);
+        return (treeName);
 
     }
 
