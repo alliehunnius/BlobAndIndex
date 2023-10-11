@@ -13,9 +13,14 @@ public class CommitTest
 
     @Test
     public void createOneCommit() throws Throwable {
+        String fileName = "testAdd";
+        File file = new File (fileName);
+        Index index = new Index();
+        index.initialize();
+        index.addBlobs (fileName);
         Commit test = new Commit ("", "me", "test");
-        File file = new File ("/objects" + test.getCommitName());
-        assertTrue (file.exists());
+        File newFile = new File ("/objects" + test.getCommitName());
+        assertTrue (newFile.exists());
     }
 
     @Test
