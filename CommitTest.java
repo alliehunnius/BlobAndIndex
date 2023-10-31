@@ -15,6 +15,7 @@ public class CommitTest
     public void createOneCommit() throws Throwable {
         String fileName = "testAdd";
         File file = new File (fileName);
+        file.createNewFile();
         Index index = new Index();
         index.initialize();
         index.addBlobs (fileName);

@@ -1,3 +1,4 @@
+import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileWriter;
@@ -9,10 +10,10 @@ public class Index {
     
     private HashMap <String, String> hm;
     private PrintWriter pw;
+    
     public Index() throws IOException
     {
         hm = new HashMap <String, String> ();
-        pw = new PrintWriter (new FileWriter("index", false));
         
     }
 
@@ -32,43 +33,85 @@ public class Index {
     public void addBlobs (String fileName) throws Throwable
     {
         Blob blob = new Blob (fileName);
-        String content = Blob.fileToString(fileName);
-        String s = Blob.encryptPassword(content);
-        hm.put(fileName, s);
-        
-        for (HashMap.Entry <String, String> entry : hm.entrySet ())
-        {
-            String string = entry.getKey () + " : " + entry.getValue();
-            pw.println(string);
-        }
-        pw.close();
+        String contentsOfInputFile = Blob.fileToString(fileName);
+        String shaOfBlobContent = Blob.encryptPassword(contentsOfInputFile);
+        hm.put(fileName, shaOfBlobContent);
+        writeToIndex (fileName + " : " + shaOfBlobContent);
+
     }
 
-    public void removeBlob (String fileName) throws Throwable
-    {
-        File file = new File(fileName);
-        if (file.exists()) 
-        {
-            String content = Blob.fileToString(fileName);
-            String s = Blob.encryptPassword(content);
-            File doomedFile = new File ("objects", s);
-            doomedFile.delete();
-        }
 
-        hm.remove(fileName);
+    public static void writeToIndex (String inputContents) throws IOException
+    {
+        
+
+      FileWriter fw = new FileWriter ("index", true);
+      BufferedWriter bw = new BufferedWriter (fw);
+      PrintWriter addLineOfContents = new PrintWriter (bw);
+
+
+        addLineOfContents.println (inputContents);
+        //do I want to close it everytime if I'm writing to the same file and it's a static method?
+        //I changed it to be inputContents rather than fileName
+
+
+
+
+           
+        addLineOfContents.close();
+        bw.close();
+        
+        
+    }
+
+
+
+
+
+    public void removeBlobFromIndexFile (String fileName) throws Throwable
+    {
+
+       
         if(hm.isEmpty())
         {
-            pw = new PrintWriter (new FileWriter("index", false));
+            throw new Exception ("There are no files in the index");
         }
-        else
-        {
-            for (HashMap.Entry <String, String> entry : hm.entrySet ())
-            {
-                pw.println (entry.getKey () + " : " + entry.getValue ());
-            }
+        else{
+
+             hm.remove(fileName);
         }
-        pw.close();
+
+        this.removeFromIndexFile (fileName);
     }
+
+
+
+    public void removeFromIndexFile (String fileName) throws Throwable
+    {
+        String fileNameContents = Blob.fileToString ("index");
+        int indexOfDeletedFile = fileNameContents.indexOf(fileName);
+        String beforeDeletedFile = fileNameContents.substring (0, indexOfDeletedFile);
+        String deletedChunk = fileName + " : " + hm.get (fileName);
+        int deletedChunkLength = deletedChunk.length();
+
+        String afterDeletedFile = fileNameContents.substring (indexOfDeletedFile + deletedChunkLength);
+        String newContents = beforeDeletedFile + afterDeletedFile;
+        
+        PrintWriter pw = new PrintWriter ("index");
+        pw.print (newContents);
+        pw.close();
+
+    }
+
+
+
+
+
+
+
+
+
+
 
     public void addDirectory (String newDirectory) throws Throwable
     {
@@ -88,13 +131,6 @@ public class Index {
 
 
     }
-
-
-
-
-
-
-
 
 
  }
