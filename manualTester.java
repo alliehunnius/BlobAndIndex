@@ -30,8 +30,8 @@ public class manualTester {
 
 
 
-        // Commit commit = new Commit ("", "me", "testerCommit");
-        // File file = new File ("/objects" + commit.getCommitName());
+        Commit commit = new Commit ("", "me", "testerCommit");
+        File file = new File ("/objects" + commit.getCommitName());
 
     }
 }
