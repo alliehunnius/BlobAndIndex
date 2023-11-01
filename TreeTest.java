@@ -20,7 +20,7 @@ import org.junit.jupiter.api.Test;
 public class TreeTest 
 {
     private static Tree tree;
-    public TreeTest() throws IOException
+    public TreeTest() throws Throwable
     {
         tree = new Tree();
     }
@@ -28,30 +28,30 @@ public class TreeTest
     @Test
     void testRemoveTree() throws Throwable 
     {
-        tree.addTree("tree : bd1ccec139dead5ee0d8c3a0499b42a7d43ac44b");
-        tree.addTree("blob : 81e0268c84067377a0a1fdfb5cc996c93f6dcf9f : file1.txt");
+        tree.addLineToTree("tree : bd1ccec139dead5ee0d8c3a0499b42a7d43ac44b");
+        tree.addLineToTree("blob : 81e0268c84067377a0a1fdfb5cc996c93f6dcf9f : file1.txt");
 
-        tree.removeTree("bd1ccec139dead5ee0d8c3a0499b42a7d43ac44b");
+        tree.removefromTree("bd1ccec139dead5ee0d8c3a0499b42a7d43ac44b");
         
         String expected = "blob : 81e0268c84067377a0a1fdfb5cc996c93f6dcf9f : file1.txt";
 
         File file = new File("objects", "bc323153dcce17da2a8cd62cb240abdc49f3fe7b"); //SHA1 of the content
         assertTrue(file.exists());
-        assertEquals(expected, Tree.content());
+        assertEquals(expected, tree.content());
     }
 
     @Test
     void testAddTree() throws Throwable 
     {
-        tree.addTree("tree : bd1ccec139dead5ee0d8c3a0499b42a7d43ac44b");
-        tree.addTree("blob : 81e0268c84067377a0a1fdfb5cc996c93f6dcf9f : file1.txt");
+        tree.addLineTree("tree : bd1ccec139dead5ee0d8c3a0499b42a7d43ac44b");
+        tree.addLineTree("blob : 81e0268c84067377a0a1fdfb5cc996c93f6dcf9f : file1.txt");
         
         String expected = "blob : 81e0268c84067377a0a1fdfb5cc996c93f6dcf9f : file1.txt" + "\n" + 
         "tree : bd1ccec139dead5ee0d8c3a0499b42a7d43ac44b";
 
         File file = new File("objects", "80aaaaaea78ef9525bf854dcb1d60e2abe087221"); //SHA1 of the content
         assertTrue(file.exists());
-        assertEquals(expected, Tree.content());
+        assertEquals(expected, tree.content());
     }
 
     private String readFile(String fileName) throws IOException 

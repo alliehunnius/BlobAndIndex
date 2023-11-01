@@ -56,7 +56,7 @@ Entries are a newline String in format  typeOfFile : shaOfFile : optionalFileNam
     the two are separated by a " : "
 Do NOT allow for duplicate 'trees' or duplicate 'filenames' in the file */
 
-    public void addTree (String entry) throws Throwable
+    public void addLineToTree (String entry) throws Throwable
     {
         if (entry.length() > 0)
         {
@@ -97,11 +97,13 @@ Do NOT allow for duplicate 'trees' or duplicate 'filenames' in the file */
     Remove a TREE entry based on SHA1
         tree.remove("bd1ccec139dead5ee0d8c3a0499b42a7d43ac44b")
  */
-    public void removeTree (String entry) throws Throwable
+    public void removeFromTree (String entry) throws Throwable
     {
         if(treeList.contains(entry))
         {
             treeList.remove(entry);
+
+
         }
         else if (blobMap.containsValue(entry))
         {
@@ -235,7 +237,7 @@ Do NOT allow for duplicate 'trees' or duplicate 'filenames' in the file */
                 Blob treeBlob = new Blob (current);
                 String fileContents = Blob.fileToString (current);
                 String sha = Blob.encryptPassword (fileContents);
-                tree.addTree ("tree : " + sha + " : " + current);
+                tree.addLineToTree ("tree : " + sha + " : " + current);
 
                 
             }
@@ -244,7 +246,7 @@ Do NOT allow for duplicate 'trees' or duplicate 'filenames' in the file */
                 Blob blob = new Blob ("objects/" + current);
                 String readFile = Blob.fileToString (current);
                 String sha = Blob.encryptPassword(readFile);
-                tree.addTree ("blob : " + sha + " : " + current);
+                tree.addLineToTree ("blob : " + sha + " : " + current);
                 
             }
             
@@ -268,16 +270,6 @@ Do NOT allow for duplicate 'trees' or duplicate 'filenames' in the file */
 
 
 
-
-
-
-
-
-
-    public String getTreeName ()
-    {
-        return newName;
-    }
 
     public void createDirectory (String dirName)
     {

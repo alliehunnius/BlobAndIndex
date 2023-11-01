@@ -13,6 +13,7 @@ import java.nio.file.StandardOpenOption;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.util.Formatter;
+import java.util.ArrayList;
 
 import org.junit.Test;
 
@@ -43,8 +44,10 @@ Returns the SHA1 of the Tree*/
     File commit;
 
     public Commit (String parent, String author, String summary) throws Throwable
-    {
-        String treeSha = createTree();
+    {   
+       
+        String shaOfCommitsTree = createTree();
+
         //entry is coming from the index file;
         //if the commit has a previous commit it has to have a pointer from the previous tree to the current tree, 
         //commit's tree has the files
@@ -55,7 +58,7 @@ Returns the SHA1 of the Tree*/
         File path = new File ("objects");
         path.mkdirs();
 
-        String contents = treeSha + "\n" + this.parent + "\n" + "\n" + author + "\n" + date + "\n" + summary;
+        String contents = shaOfCommitsTree + "\n" + this.parent + "\n" + "\n" + author + "\n" + date + "\n" + summary;
         String commitName = Blob.encryptPassword (contents);
 
         File theCommit = new File ("objects/", commitName);
@@ -93,24 +96,47 @@ Returns the SHA1 of the Tree*/
 
         Tree tree = new Tree();
         String indexContents = Blob.fileToString ("index");
-        tree.addTree(indexContents);
+        
+        
+
+
+
+
+       if (indexContents.indexOf ("\n") != -1)
+       {
+        int indexOfNewLine = indexContents.indexOf ("\n");
+        ArrayList <String> arrayOfLinesForTree = new ArrayList <String> ();
+        
+        
+        while (indexOfNewLine != -1)
+       {
+            arrayOfLinesForTree.add (indexContents.substring (0, indexOfNewLine));
+            indexContents = indexContents.substring (indexOfNewLine + 1);
+            indexOfNewLine = indexContents.indexOf ("\n");
+
+       }
+
+         for (int i = 0; i < arrayOfLinesForTree.size(); i++)
+         {
+                tree.addLineToTree (arrayOfLinesForTree.get(i));
+       }
+
+        
         //I want the Tree's sha for the first line of the Commit
 
 
         //need to add previous tree
 
-        if (parent == "")
+        if (parent != "" && parent != null)
         {
             BufferedReader prevCommitReader = new BufferedReader (new FileReader (parent));
             String previousTree = prevCommitReader.readLine();
             prevCommitReader.close();
-            tree.addTree (previousTree);
+            tree.addLineToTree (previousTree);
         }
         
-
-
-        String treeContents = tree.content();
-        return Blob.encryptPassword (treeContents);
+    }
+    return Tree.getCurrentFileName();
        
     }
 
@@ -181,7 +207,7 @@ Returns the SHA1 of the Tree*/
 
 
 
-        tree.addTree (indexContents);//contents of index file
+        tree.addLineToTree (indexContents);//contents of index file
         
         //clear out index contents
 
@@ -199,7 +225,7 @@ Returns the SHA1 of the Tree*/
 
             String shaPreviousContents = br.readLine();
             String add = "tree : " + shaPreviousContents;
-            tree.addTree (add);
+            tree.addLineToTree (add);
             br.close();
         }
 
