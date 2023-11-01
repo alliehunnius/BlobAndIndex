@@ -14,6 +14,7 @@ public class Index {
     public Index() throws IOException
     {
         hm = new HashMap <String, String> ();
+        pw = new PrintWriter (new FileWriter("index", false));
         
     }
 
@@ -37,6 +38,16 @@ public class Index {
         String shaOfBlobContent = Blob.encryptPassword(contentsOfInputFile);
         hm.put(fileName, shaOfBlobContent);
         writeToIndex (fileName + " : " + shaOfBlobContent);
+
+
+
+
+        // for (HashMap.Entry <String, String> entry : hm.entrySet ())
+        // {
+        //     String string = entry.getKey () + " : " + entry.getValue();
+        //     pw.println(string);
+        // }
+        // pw.close();
 
     }
 
@@ -77,22 +88,45 @@ public class Index {
             throw new Exception ("There are no files in the index");
         }
         else{
-
+            this.removeLineFromIndexFile (fileName);
              hm.remove(fileName);
         }
 
-        this.removeFromIndexFile (fileName);
+
+
+        // if(hm.isEmpty())
+        // {
+        //     pw = new PrintWriter (new FileWriter("index", false));
+        // }
+        // else
+        // {
+        //     for (HashMap.Entry <String, String> entry : hm.entrySet ())
+        //     {
+        //         pw.println (entry.getKey () + " : " + entry.getValue ());
+        //     }
+        // }
+        // pw.close();
+
+
+
+
+
+
+
+
+
+        
     }
 
 
 
-    public void removeFromIndexFile (String fileName) throws Throwable
+    public void removeLineFromIndexFile (String fileName) throws Throwable
     {
         String fileNameContents = Blob.fileToString ("index");
         int indexOfDeletedFile = fileNameContents.indexOf(fileName);
         String beforeDeletedFile = fileNameContents.substring (0, indexOfDeletedFile);
         String deletedChunk = fileName + " : " + hm.get (fileName);
-        int deletedChunkLength = deletedChunk.length();
+        int deletedChunkLength = deletedChunk.length() + 1;
 
         String afterDeletedFile = fileNameContents.substring (indexOfDeletedFile + deletedChunkLength);
         String newContents = beforeDeletedFile + afterDeletedFile;
